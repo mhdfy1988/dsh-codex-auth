@@ -1,0 +1,10 @@
+# Compose the official authorization seam and the Codex Web Consumer over the
+# base/web application. Credentials, settings, and llm-pi-ai are owned by base.
+
+- insert:
+    - id: authorization
+      name: '@deepseek-ai/dsh-authorization'
+
+    - id: codex-auth
+      name: 'dsh-codex-auth'
+      inject: [authorization, credentials, settings]

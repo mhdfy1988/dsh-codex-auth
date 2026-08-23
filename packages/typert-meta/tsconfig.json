@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.workspace.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib",
+    "tsBuildInfoFile": "lib/tsconfig.tsbuildinfo",
+    "types": []
+  },
+  "files": ["src/index.ts"]
+}

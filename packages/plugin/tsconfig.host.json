@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.workspace.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types",
+    "tsBuildInfoFile": "lib/tsconfig.host.tsbuildinfo",
+    "baseUrl": "../..",
+    "ignoreDeprecations": "6.0",
+    "types": ["node"],
+    "paths": {
+      "@deepseek-ai/dsh-typert-protocol": ["packages/typert-meta/src/index.ts"]
+    }
+  },
+  "files": [
+    "src/index.ts",
+    "src/types.ts"
+  ],
+  "references": [
+    { "path": "../typert-meta/tsconfig.json" }
+  ]
+}

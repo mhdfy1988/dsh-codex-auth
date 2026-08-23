@@ -1,0 +1,14 @@
+# Add the official authorization service and a one-shot CLI surface over the
+# dsh-base composition. The base bundle already owns credentials-local and
+# llm-pi-ai; once authorization mounts, llm-pi-ai registers its login flows.
+
+- insert:
+    - id: authorization
+      name: '@deepseek-ai/dsh-authorization'
+
+    - id: codex-auth-startup
+      name: 'dsh-codex-auth-cli-proof/startup'
+
+    - id: codex-auth-cli
+      name: 'dsh-codex-auth-cli-proof'
+      inject: [authorization, codexAuthStartup]

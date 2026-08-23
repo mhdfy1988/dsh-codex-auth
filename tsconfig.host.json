@@ -1,0 +1,16 @@
+{
+  "files": [],
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
+    "paths": {
+      "@deepseek-ai/dsh-typert-protocol": ["packages/typert-meta/src/index.ts"]
+    }
+  },
+  "references": [
+    { "path": "./packages/typert-meta/tsconfig.json" },
+    { "path": "./packages/plugin/tsconfig.host.json" }
+  ]
+}

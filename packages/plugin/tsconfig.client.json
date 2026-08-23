@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.workspace.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib/types",
+    "tsBuildInfoFile": "lib/tsconfig.client.tsbuildinfo",
+    "types": ["react"]
+  },
+  "files": [
+    "src/types.ts",
+    "src/client/index.tsx",
+    "src/client/styles.ts"
+  ]
+}
