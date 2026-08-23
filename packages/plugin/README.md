@@ -62,6 +62,8 @@ pnpm.cmd dsh plugin --profile codex-next add $nextPackage
 
 对同一个 profile 再执行 `add` 新 tgz 即为升级；重新 `add` 旧 tgz 即为回滚。profile 固定插件组合和版本，但同一 `DSH_HOME` 下的 profile 共享凭据与设置；需要完全隔离账号时必须使用不同 `DSH_HOME`。
 
+不要用新内容覆盖同一路径、同一版本号的 tgz 后直接再次 `add`；pnpm 可能复用旧缓存。正式重打包应增加版本号；只做本地临时复验时，先 `plugin remove dsh-codex-auth`，再安装重打的 tgz。
+
 不要并行运行两个 profile 的 `--dump-config`。当前 Harness 会让它们共同写入 `$DSH_HOME/profiles/node_modules` 解析目录，并可能发生符号链接 `EEXIST`；串行执行即可。
 
 ## 卸载
