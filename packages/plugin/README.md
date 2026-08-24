@@ -16,7 +16,7 @@ DeepSeek Harness 的独立 Codex Auth 插件包。它挂载官方 `Authorization
 将 tgz 安装到已有 Web profile：
 
 ```powershell
-$packagePath = 'C:\path\to\dsh-codex-auth-0.2.0-alpha.3.tgz'
+$packagePath = 'C:\path\to\dsh-codex-auth-0.2.0.tgz'
 pnpm.cmd dsh plugin --profile web add $packagePath
 pnpm.cmd dsh --profile web --dump-config
 ```
@@ -49,13 +49,21 @@ pnpm.cmd dsh --profile codex-next --no-open --port 3081
 
 “退出登录”只删除本地 `llm-pi-ai/openai-codex` 授权记录，不向 OpenAI 发起吊销；“移除模型路线”只删除设置中的 `openai-codex` 路线，保留授权记录。
 
-## stable / next、升级与回滚
+## 更新、stable / next 与回滚
+
+更新前先停止当前 Web 进程，再对同一个 profile 安装新版本 tgz，最后重新启动。插件命令只更新下一次启动使用的配置，不会热替换正在运行的 Web 实例。
+
+```powershell
+$packagePath = 'C:\path\to\dsh-codex-auth-0.2.0.tgz'
+pnpm.cmd dsh plugin --profile web add $packagePath
+pnpm.cmd dsh web --port 3080
+```
 
 两个 profile 可以固定不同 tgz：
 
 ```powershell
-$stablePackage = 'C:\path\to\dsh-codex-auth-0.2.0-alpha.2.tgz'
-$nextPackage = 'C:\path\to\dsh-codex-auth-0.2.0-alpha.3.tgz'
+$stablePackage = 'C:\path\to\dsh-codex-auth-0.2.0.tgz'
+$nextPackage = 'C:\path\to\dsh-codex-auth-<next-version>.tgz'
 pnpm.cmd dsh plugin --profile codex-stable add $stablePackage
 pnpm.cmd dsh plugin --profile codex-next add $nextPackage
 ```
@@ -66,13 +74,15 @@ pnpm.cmd dsh plugin --profile codex-next add $nextPackage
 
 不要并行运行两个 profile 的 `--dump-config`。当前 Harness 会让它们共同写入 `$DSH_HOME/profiles/node_modules` 解析目录，并可能发生符号链接 `EEXIST`；串行执行即可。
 
+如果早期曾使用 `link:` 开发安装，迁移到正式 tgz 前应先卸载旧包，并确认 Profile 的 `node_modules/dsh-codex-auth` 不再是指向源码工作区的 junction。Windows 上残留的 junction 会让 pnpm 沿旧链接读取开发依赖，并在安装正式包时触发 `EPERM`；清除残留链接后重新安装 tgz，不要回退到 `link:`。
+
 ## 卸载
 
 ```powershell
 pnpm.cmd dsh plugin --profile codex-next remove dsh-codex-auth
 ```
 
-卸载会移除包和配置层，不会删除 `$DSH_HOME` 中已有的 Codex grant。若要删除本地 grant，先在 Codex 设置中明确执行“退出登录”。
+卸载命令执行后需要重新启动 Web。卸载会移除包和配置层，不会删除 `$DSH_HOME` 中已有的 Codex grant。若要删除本地 grant，先在 Codex 设置中明确执行“退出登录”。
 
 ## 失败行为
 

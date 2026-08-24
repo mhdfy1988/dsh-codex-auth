@@ -41,8 +41,10 @@ Pop-Location
 
 安装与版本管理见 [可发布包 README](./packages/plugin/README.md)，版本变化见 [可发布包 CHANGELOG](./packages/plugin/CHANGELOG.md)。
 
+从早期 `link:` 开发安装迁移到 `.tgz` 时，应先通过 Harness 插件命令卸载旧包，并确认 Profile 的 `node_modules/dsh-codex-auth` 不再是指向源码工作区的 junction。Windows 上残留的 junction 会让 pnpm 沿旧链接读取开发依赖，并在导入正式包时触发 `EPERM`；清除该残留链接后再安装版本化 `.tgz`，不要回退到 `link:` 掩盖问题。
+
 ## 当前验证状态
 
-`0.2.0-alpha.3` 完成项目与 npm 包统一改名；`0.2.0-alpha.2` 保留为新包名下的 stable 基线。功能链路已完成真实 ChatGPT 登录、GPT-5.6 Sol Web 请求、宿主重启后复用、终态脱敏、取消/失败/并发自动化、tgz Web 加载、stable/next 共存、升级、回滚和卸载验证。
+`0.2.0` 是首个正式版本，在 Harness 官方授权与凭据能力之上提供 ChatGPT 登录、Codex 模型路线管理和带独立钥匙图标的 Web 设置入口。功能链路已完成真实 ChatGPT 登录、GPT-5.6 Sol Web 请求、宿主重启后复用、终态脱敏、取消/失败/并发自动化、tgz Web 加载、stable/next 共存、升级、回滚和卸载验证。
 
 真实 OAuth grant 的到期刷新没有通过等待生产令牌过期来触发；刷新读改写和跨进程锁由 Harness 官方 `llm-pi-ai` 与 `credentials-local` 测试覆盖。正式凭据的“退出登录”按钮未点击，以免删除用户当前登录；本包的删除范围由自动化测试覆盖。

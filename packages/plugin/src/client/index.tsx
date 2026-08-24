@@ -62,6 +62,7 @@ export async function apply(ctx: ClientContext): Promise<void> {
   ctx.effect(() => disposeRemote, 'codex-auth: generated Remote contribution')
   ctx.effect(() => ctx.locale.register(NS, { zh, en }), 'codex-auth: dictionaries')
   const t = ctx.locale.bind(NS) as CodexSectionInjected['t']
+  installNavMarker(ctx, t)
   ctx.inject(['remote.codexAuth'], (scope: ClientContext) => {
     scope.slots.inject('settings.section', () => scope.slots.register({
       name: 'settings.section',
@@ -71,6 +72,27 @@ export async function apply(ctx: ClientContext): Promise<void> {
       inject: (): CodexSectionInjected => ({ remote: scope.remote.codexAuth, t }),
     }, CodexSection))
   })
+}
+
+function installNavMarker(ctx: ClientContext, t: CodexSectionInjected['t']): void {
+  ctx.effect(() => {
+    if (typeof document === 'undefined') return () => {}
+    const attribute = 'data-dca-codex-nav'
+    const scan = (): void => {
+      document.querySelectorAll<HTMLElement>(`[${attribute}]`).forEach(element => { element.removeAttribute(attribute) })
+      const label = t('nav').trim()
+      document.querySelectorAll<HTMLElement>('[role="dialog"] nav button').forEach(button => {
+        if (button.textContent?.trim() === label) button.setAttribute(attribute, 'true')
+      })
+    }
+    const observer = new MutationObserver(scan)
+    observer.observe(document.documentElement, { childList: true, characterData: true, subtree: true })
+    scan()
+    return () => {
+      observer.disconnect()
+      document.querySelectorAll<HTMLElement>(`[${attribute}]`).forEach(element => { element.removeAttribute(attribute) })
+    }
+  }, 'codex-auth: settings navigation icon')
 }
 
 function unwrap(result: RemoteResult<CodexAuthView>): CodexAuthView {

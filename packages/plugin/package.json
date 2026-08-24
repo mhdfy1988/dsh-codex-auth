@@ -1,6 +1,6 @@
 {
   "name": "dsh-codex-auth",
-  "version": "0.2.0-alpha.3",
+  "version": "0.2.0",
   "description": "Native ChatGPT/Codex authorization and Web settings bundle for DeepSeek Harness",
   "type": "module",
   "main": "lib/index.js",
